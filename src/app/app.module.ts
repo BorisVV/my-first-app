@@ -1,10 +1,19 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler} from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { from } from 'rxjs';
 
-import { AppComponent } from './app.component';
+import {MatInputModule} from '@angular/material/input/';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import { MatSliderModule } from '@angular/material/slider';
+
+import { AppComponent} from './app.component';
 import { PostCreateComponent } from './posts/post-create/post-create.component';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -13,9 +22,14 @@ import { PostCreateComponent } from './posts/post-create/post-create.component';
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatCardModule,
+    MatButtonModule,
+    MatSliderModule
   ],
-  providers: [],
+  providers: [{provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
