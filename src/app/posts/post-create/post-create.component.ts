@@ -13,14 +13,14 @@ export class PostCreateComponent {
   enteredContent = "";
   @Output() postCreated = new EventEmitter();
 
-  constructor(public postService: PostsService){}
+  constructor(public postsService: PostsService){}
 
   onAddPost(form: NgForm) {
     //this.newPost = this.enteredContent;
     if (form.invalid) {
       return;
     }
-    this.postService.addPost(form.value.title, form.value.content);
+    this.postsService.addPost(form.value.title, form.value.content);
   }
 
 }
