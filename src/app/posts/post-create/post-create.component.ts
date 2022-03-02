@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, EventEmitter, Output} from "@angular/core";
 import { NgForm } from "@angular/forms";
 
 import { PostsService } from "../posts.service";
@@ -11,6 +11,7 @@ import { PostsService } from "../posts.service";
 export class PostCreateComponent {
   enteredTitle = "";
   enteredContent = "";
+  @Output() postCreated = new EventEmitter();
 
   constructor(public postService: PostsService){}
 

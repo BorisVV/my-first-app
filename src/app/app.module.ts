@@ -37,6 +37,9 @@ import { HeaderComponent } from './header/header.component';
   ],
 
   providers: [],
+  //Another option
+  // provider: [PostService]
+
   // remember to remove // import
   //providers: [{provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
   bootstrap: [AppComponent]
