@@ -18,10 +18,10 @@ export class PostCreateComponent {
   onAddPost(form: NgForm) {
     //this.newPost = this.enteredContent;
     if (form.invalid) {
-      return;
+      return; 
     }
     this.postsService.addPost(form.value.title, form.value.content);
-    form.resetForm();
+    form.resetForm(); //rest the inputs and text on the form
   }
 
 }
