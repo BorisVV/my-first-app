@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-const express = require
-=======
 const express = require('express');
 
 const app = express(); //returns app
@@ -18,4 +15,3 @@ app.use((req, res, next) => {
 module.exports = app;
 
 
->>>>>>> 3.3.22.2
