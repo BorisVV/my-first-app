@@ -10,4 +10,5 @@ const server = http.createServer(app);
 
 server.listen(port);
 
+// The code below is to check that the console works - only
 //console.log("Hello!");
