@@ -55,6 +55,8 @@ server.on("error", onError);
 server.on("Listening", onListening);
 server.listen(port);
 
+//To run the server ~npm run start:server from the terminal
+
 //The host will give the process otherwise get the 3000 path
 //Use the localhost:3000 for development test
 //const port = process.env.PORT || 3000;
