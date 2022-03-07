@@ -1,6 +1,8 @@
 //const { Message } = require('@angular/compiler/src/i18n/i18n_ast');
 const express = require("express");
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
+
+const Post = require('./models/post');
 
 const app = express(); //returns an express app
 
@@ -15,8 +17,12 @@ app.use((req, res, next) => {
 });
 
 app.post("api/posts", (req, res, next) => {
-  const post = req.body;
-  console.log();
+  //const post = req.body; //This line was used before the mongodb
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content
+  });
+  console.log(post);
   res.status(201).json({message: "Post added sucdcessfullu"}); // There is no need to send a message, is optional.
 });
 
