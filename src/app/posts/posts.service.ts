@@ -9,6 +9,7 @@ export class PostsService{
   private postsUpdated = new Subject<Post[]>();
 
   constructor(private http: HttpClient) {}
+
   getPosts() {
   this.http.get<{message: string, posts: Post[]}>('http://localhost:3000/api/posts')
     .subscribe((postData) => {

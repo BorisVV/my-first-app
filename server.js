@@ -1,6 +1,6 @@
 
-//Wire with backend/app.js
-const app = require('./backend/app');
+
+const app = require('./backend/app'); //Wire with backend/app.js
 const debug = require("debug")("node-angular");
 const http = require('http');
 //const { debug } = require('console');
@@ -47,23 +47,16 @@ const onListening = () => {
   debug("Listening on " + bind);
 };
 
+//To run the server ~npm run start:server from the terminal
 const port = normalizePort(process.env.PORT || "3000");
+
 app.set("port", port);
 
 const server = http.createServer(app);
+
 server.on("error", onError);
+
 server.on("Listening", onListening);
+
 server.listen(port);
 
-//To run the server ~npm run start:server from the terminal
-
-//The host will give the process otherwise get the 3000 path
-//Use the localhost:3000 for development test
-//const port = process.env.PORT || 3000;
-//app.set('port', port);
-//const server = http.createServer(app);
-
-//server.listen(port);
-
-// The code below is to check that the console works - only
-//console.log("Hello!");
