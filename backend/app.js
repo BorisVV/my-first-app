@@ -7,7 +7,7 @@ const Post = require('./models/post');
 
 const app = express(); //returns an express app
 
-mongoose.connect("mongodb+srv://boirs:xgx3BSJAfRrLF7bI@cluster0.buqn3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://boirs:xgx3BSJAfRrLF7bI@cluster0.buqn3.mongodb.net/node-angular?retryWrites=true&w=majority")
   .then(() => {
     console.log('Connected to database');
   })
@@ -30,7 +30,8 @@ app.post("api/posts", (req, res, next) => {
     title: req.body.title,
     content: req.body.content
   });
-  console.log(post);
+  //console.log(post);
+  post.save();
   res.status(201).json({message: "Post added sucdcessfullu"}); // There is no need to send a message, is optional.
 });
 
