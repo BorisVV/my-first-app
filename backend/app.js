@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post("api/posts", (req, res, next) => {
+app.post("/api/posts", (req, res, next) => {
   //const post = req.body; //This line was used before the mongodb
   const post = new Post({
     title: req.body.title,
@@ -33,25 +33,18 @@ app.post("api/posts", (req, res, next) => {
   //console.log(post);
   post.save();
   res.status(201).json({message: "Post added sucdcessfullu"}); // There is no need to send a message, is optional.
+  next();
 });
 
-app.use('/api/posts', (req, res, next) => {
-  const posts = [
-    {
-      id: "ffsdfsdad",
-      title: "First server-side post",
-      content: "This is coming from the server",
-    },
-    {
-      id: "fdjflfdsowe",
-      title: "Second server-side post",
-      content: "This is coming from the server!",
-    }
-  ];
-  res.status(200).json({
-    message: "Posts fecthed succesfully!",
-    posts: posts
-  });
+app.get('/api/posts', (req, res, next) => {
+  Post.find()
+    .then(documents => {
+      console.log(documents)
+      res.status(200).json({
+        message: "Posts fecthed succesfully!",
+        posts: documents
+      });
+    });
 });
 
 //Wire with server.js as listener
