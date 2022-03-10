@@ -24,6 +24,7 @@ app.use((req, res, next) => {
   next();
 });
 
+//  Post the list of posts
 app.post("/api/posts", (req, res, next) => {
   //const post = req.body; //This line was used before the mongodb
   const post = new Post({
@@ -35,6 +36,7 @@ app.post("/api/posts", (req, res, next) => {
   res.status(201).json({message: "Post added sucdcessfullu"}); // There is no need to send a message, is optional.
 });
 
+//Get the posts or fetch
 app.get('/api/posts', (req, res, next) => {
   Post.find()
     .then(documents => {
@@ -45,6 +47,11 @@ app.get('/api/posts', (req, res, next) => {
       });
     });
 });
+
+app.delete('/api/post/:id', (req, res, next) => {
+  console.log(req.params.id);
+  res.status(200).json({message: "Post Deleted"});
+})
 
 //Wire with server.js as listener
 module.exports = app;
