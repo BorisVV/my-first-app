@@ -33,7 +33,6 @@ app.post("/api/posts", (req, res, next) => {
   //console.log(post);
   post.save();
   res.status(201).json({message: "Post added sucdcessfullu"}); // There is no need to send a message, is optional.
-  next();
 });
 
 app.get('/api/posts', (req, res, next) => {
