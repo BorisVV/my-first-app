@@ -9,7 +9,7 @@ export class PostsService{
   private posts: Post[] = [];
   private postsUpdated = new Subject<Post[]>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {};
 
   getPosts() {
   this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts')
@@ -26,19 +26,25 @@ export class PostsService{
       this.posts = transformedPosts;
       this.postsUpdated.next([...this.posts]);
     });
-  }
+  };
 
   getPostUpdateListener() {
     return this.postsUpdated.asObservable();
-  }
+  };
 
   addPost(title: string, content: string) {
     const post: Post = {id: null, title: title, content: content};
-    this.http.post<{message: string}>('http://localhost:3000/api/posts', post)
+    this.http.post<{message: string}>("http://localhost:3000/api/posts", post)
       .subscribe((respondData) => {
         console.log(respondData.message);
         this.posts.push(post);
         this.postsUpdated.next([...this.posts]);
-      });
-   }
- }
+    });
+  };
+
+  deletePost(postId: string){
+    this.http.delete("http://localhost:3000/api/posts/" + postId)
+      .subscribe(() => {console.log('Post deleted!')});
+  };
+
+};
