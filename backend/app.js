@@ -33,7 +33,7 @@ app.post("/api/posts", (req, res, next) => {
     content: req.body.content
   });
   post.save();
-  res.status(201).json({ message: "Post added succesfully!" });
+  res.status(200).json({ message: "Post added succesfully!" });
 });
 
 //Get the posts or fetch
@@ -41,7 +41,7 @@ app.get('/api/posts', (req, res, next) => {
   Post.find()
     .then(documents => {
       console.log(documents)
-      res.status(201).json({
+      res.status(200).json({
         message: "Posts fecthed succesfully!",
         posts: documents
     });
@@ -49,11 +49,11 @@ app.get('/api/posts', (req, res, next) => {
 });
 
 app.delete("/api/posts/:id", (req, res, next) => {
-  console.log(req.params.id);
+  //console.log(req.params.id);
   Post.deleteOne({_id: req.params.id}).then(result => {
-    console.log(result)});
-  console.log(result);
-  res.status(200).json({message: "Post Deleted"});
+    res.status(200).json({message: "Post Deleted"});
+        //console.log(result);
+  });
 });
 
 //Wire with server.js as listener
