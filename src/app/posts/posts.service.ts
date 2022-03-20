@@ -16,6 +16,7 @@ export class PostsService{
     .get<{message: string, posts: any}>("http://localhost:3000/api/posts")
     .pipe(map((postData) => {
       return postData.posts.map(post => {
+        console.log(postData.message); //This message is given in the browser's console from ./backend/app.js
         return {
           title: post.title,
           content: post.content,
@@ -38,7 +39,7 @@ export class PostsService{
     this.http
       .post<{message: string}>("http://localhost:3000/api/posts", post)
       .subscribe((respondData) => {
-        //console.log(respondData.message);
+        //console.log(respondData.message); //This displays a message on the browser's console from the ./backend/app.js
         this.posts.push(post);
         this.postsUpdated.next([...this.posts]);
     });
@@ -46,8 +47,9 @@ export class PostsService{
 
   deletePost(postId: string){
     this.http
-      .delete("http://localhost:3000/api/posts/" + postId)
-      .subscribe(() => {
+      .delete<{message: string}>("http://localhost:3000/api/posts/" + postId)
+      .subscribe((respondData) => {
+        console.log(respondData.message); //This displays a message on the browser's console from the ./backend/app.js
         const updatedPosts = this.posts.filter(post => post.id !== postId);
         this.posts = updatedPosts;
         this.postsUpdated.next([...this.posts]);
