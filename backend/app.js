@@ -33,26 +33,27 @@ app.post("/api/posts", (req, res, next) => {
     content: req.body.content
   });
   post.save();
-  res.status(200).json({ message: "Post added succesfully!" });
+  res.status(201).json({ message: "Post added succesfully!" });
 });
 
 //Get the posts or fetch
 app.get('/api/posts', (req, res, next) => {
   Post.find()
-    .then(documents => {
-      console.log(documents)
-      res.status(200).json({
-        message: "Posts fecthed succesfully!",
-        posts: documents
+  .then(documents => {
+    //console.log(documents);
+    res.status(200).json({
+      message: "Posts fecthed succesfully!",
+      posts: documents
     });
   });
 });
 
 app.delete("/api/posts/:id", (req, res, next) => {
   //console.log(req.params.id);
-  Post.deleteOne({_id: req.params.id}).then(result => {
+  Post.deleteOne({_id: req.params.id})
+  .then(result => {
     res.status(200).json({message: "Post Deleted"});
-        //console.log(result);
+    //console.log(result);
   });
 });
 
