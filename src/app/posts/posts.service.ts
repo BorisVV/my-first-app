@@ -39,8 +39,8 @@ export class PostsService{
     this.http
       .post<{message: string, postId: string}>("http://localhost:3000/api/posts", post)
       .subscribe((respondData) => {
-        const newId = respondData.postId;
-        post.id = newId;
+        //const newId = respondData.postId; //This puts the id in a var and then it can be added to the post.id which is null at the moment.
+        post.id = respondData.postId; // This works too. The line above, it is set to a var first.
         //console.log(respondData.message); //This displays a message on the browser's console from the ./backend/app.js
         this.posts.push(post);
         this.postsUpdated.next([...this.posts]);
