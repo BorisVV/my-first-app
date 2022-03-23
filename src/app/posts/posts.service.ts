@@ -12,7 +12,7 @@ export class PostsService{
   constructor(private http: HttpClient) {};
 
   getPosts() {
-  this.http
+    this.http
     .get<{message: string, posts: any}>("http://localhost:3000/api/posts")
     .pipe(map((postData) => {
       return postData.posts.map(post => {
