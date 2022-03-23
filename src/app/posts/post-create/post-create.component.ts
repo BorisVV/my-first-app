@@ -15,7 +15,7 @@ export class PostCreateComponent implements OnInit{
   enteredContent = "";
   private mode = "create";
   private postId: string;
-  private post: Post;
+  post: Post;
 
   @Output() postCreated = new EventEmitter();
 
