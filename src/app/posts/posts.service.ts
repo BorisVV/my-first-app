@@ -34,6 +34,10 @@ export class PostsService{
     return this.postsUpdated.asObservable();
   }
 
+  getPost(id) {
+    return this.posts.find(p => p.id === id); //This will get the id of the post that needs to be edited.
+  }
+
   addPost(title: string, content: string) {
     const post: Post = {id: null, title: title, content: content};
     this.http
