@@ -13,9 +13,10 @@ import { Post } from "../post.model";
 export class PostCreateComponent implements OnInit{
   enteredTitle = "";
   enteredContent = "";
+  post: Post;
   private mode = "create";
   private postId: string;
-  post: Post;
+
 
   @Output() postCreated = new EventEmitter();
 
@@ -34,12 +35,21 @@ export class PostCreateComponent implements OnInit{
     });
   }
 
-  onAddPost(form: NgForm) {
+  onSavePost(form: NgForm) {
     //this.newPost = this.enteredContent;
     if (form.invalid) {
       return;
     }
-    this.postsService.addPost(form.value.title, form.value.content);
+    if (this.mode === "create") {
+      this.postsService.addPost(
+        form.value.title,
+        form.value.content);
+    }else {
+      this.postsService.updatedPost(
+        this.postId,
+        form.value.title,
+        form.value.content);
+    }
     form.resetForm(); //rest the inputs and text on the form
   }
 

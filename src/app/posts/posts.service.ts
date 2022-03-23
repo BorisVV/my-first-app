@@ -51,6 +51,15 @@ export class PostsService{
     });
   }
 
+  updatedPost(id: string, title: string, content: string) {
+    const post: Post = {id: id, title: title, content: content};
+    this.http
+    .put<{message: string}>("http://localhost:3000/api/posts/" + id, post)
+    .subscribe((response) => {
+      console.log(response.message);
+    });
+  }
+
   deletePost(postId: string){
     this.http
       .delete<{message: string}>("http://localhost:3000/api/posts/" + postId)
