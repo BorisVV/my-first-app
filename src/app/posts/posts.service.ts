@@ -35,7 +35,9 @@ export class PostsService{
   }
 
   getPost(id) {
-    return this.posts.find(p => p.id === id); //This will get the id of the post that needs to be edited.
+    return this.http.get<{_id: string, title: string, content: string}>("http://localhost:3000/api/posts/" + id);
+    // This was the original set up, that was doing work before changing adding the app.js.app.get...
+    //return this.posts.find(p => p.id === id); //This will get the id of the post that needs to be edited.
   }
 
   addPost(title: string, content: string) {
@@ -55,8 +57,13 @@ export class PostsService{
     const post: Post = {id: id, title: title, content: content};
     this.http
     .put<{message: string}>("http://localhost:3000/api/posts/" + id, post)
-    .subscribe((response) => {
-      console.log(response.message);
+    .subscribe(response => {
+      //Uptates the post locally, is good pratice
+      const updatedPost = [...this.posts];
+      const oldpostId = updatedPost.findIndex(p => p.id === post.id);
+      updatedPost[oldpostId] = post;
+      this.posts = updatedPost;
+      this.postsUpdated.next([...this.posts]);
     });
   }
 
