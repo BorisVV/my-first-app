@@ -70,7 +70,7 @@ export class PostCreateComponent implements OnInit{
         this.form.value.title,
         this.form.value.content);
     }
-    this.form.reset; //reset the inputs and text on the form
+    this.form.reset(); //reset the inputs and text on the form
   }
 
 }
