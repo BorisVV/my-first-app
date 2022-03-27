@@ -3,9 +3,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-const Post = require('./models/post');
-
 const app = express(); //returns an express app
+
+const postsRoutes = require('./routes/posts')
 
 mongoose.connect("mongodb+srv://boirs:xgx3BSJAfRrLF7bI@cluster0.buqn3.mongodb.net/node-angular?retryWrites=true&w=majority")
   .then(() => {
@@ -25,65 +25,7 @@ app.use((req, res, next) => {
   next();
 });
 
-//  Post the list of posts
-app.post("/api/posts", (req, res, next) => {
-  //const post = req.body; //This line was used before the mongodb
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content
-  });
-  post.save().then(postCreated => {
-    res.status(201).json({
-      message: "Post added succesfully!",
-      postId: postCreated._id
-    });
-  });
-});
-
-
-app.put('/api/posts/:id', (req, res, next) => {
-  const post = new Post({
-    _id: req.body.id,
-    title: req.body.title,
-    content: req.body.content
-  });
-  Post.updateOne({_id: req.params.id}, post)
-  .then((result) => {
-    //console.log(result); //This displays information in the terminal
-    res.status(200).json({message: "Post updated succesfully!"});
-  });
-});
-
-//Get the posts or fetch
-app.get('/api/posts', (req, res, next) => {
-  Post.find()
-  .then(documents => {
-    //console.log(documents);
-    res.status(200).json({
-      message: "Posts fecthed succesfully!",
-      posts: documents
-    });
-  });
-});
-
-app.get("/api/posts/:id", (req, res, next) => {
-  Post.findById(req.params.id).then(post => {
-    if (post) {
-      return res.status(200).json(post);
-    } else {
-      return res.status(404).json({message: "Post id not founded"});
-    }
-  });
-});
-
-app.delete("/api/posts/:id", (req, res, next) => {
-  //console.log(req.params.id);
-  Post.deleteOne({_id: req.params.id})
-  .then(result => {
-    res.status(200).json({message: "Post Deleted"});
-    //console.log(result);
-  });
-});
+app.use('/api/posts', postsRoutes);
 
 //Wire with server.js as listener
 module.exports = app;
