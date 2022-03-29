@@ -21,7 +21,8 @@ export class PostsService{
         return {
           title: post.title,
           content: post.content,
-          id: post._id
+          id: post._id,
+          imagePath: post.imagePath
         };
       });
     }))
@@ -47,12 +48,13 @@ export class PostsService{
     postData.append("content", content);
     postData.append("image", image, title);
     this.http
-      .post<{message: string, postId: string}>("http://localhost:3000/api/posts", postData)
+      .post<{message: string, post: Post}>("http://localhost:3000/api/posts", postData)
       .subscribe((respondData) => {
         const post: Post = {
-          id: respondData.postId,
+          id: respondData.post.id,
           title: title,
-          content: content
+          content: content,
+          imagePath: respondData.post.imagePath
         };
         //const newId = respondData.postId; //This puts the id in a var and then it can be added to the post.id which is null at the moment.
         //post.id = respondData.postId; // This works too. The line above, it is set to a var first.
@@ -64,7 +66,7 @@ export class PostsService{
   }
 
   updatedPost(id: string, title: string, content: string) {
-    const post: Post = {id: id, title: title, content: content};
+    const post: Post = {id: id, title: title, content: content, imagePath: null };
     this.http
     .put<{message: string}>("http://localhost:3000/api/posts/" + id, post)
     .subscribe(response => {

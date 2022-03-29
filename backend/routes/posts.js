@@ -2,7 +2,7 @@ const express = require('express');
 const req = require('express/lib/request');
 const multer = require("multer");
 
-const route = express.Router();
+const router = express.Router();
 
 const MIME_YPE_MAP = {
   'image/png': 'png',
@@ -30,22 +30,30 @@ const storage = multer.diskStorage({
 const Post = require('../models/post');
 
 //  Post the list of posts
-route.post('', multer({storage: storage}).single("image"), (req, res, next) => {
+router.post('', multer({storage: storage}).single("image"), (req, res, next) => {
+  const url = req.protocol + '://' + req.get("host");
   //const post = req.body; //This line was used before the mongodb
   const post = new Post({
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    imagePath: url + "/images/" + req.file.filename
   });
   post.save().then(postCreated => {
     res.status(201).json({
       message: "Post added succesfully!",
-      postId: postCreated._id
+      post: {
+        ...postCreated, // This is equal to
+                        //title: postCreated.title,
+                        //content: postCreated.content,
+                        //imagePath: postCreated.imagePath
+        id: postCreated._id,
+      }
     });
   });
 });
 
 
-route.put('/:id', (req, res, next) => {
+router.put('/:id', (req, res, next) => {
   const post = new Post({
     _id: req.body.id,
     title: req.body.title,
@@ -59,7 +67,7 @@ route.put('/:id', (req, res, next) => {
 });
 
 //Get the posts or fetch
-route.get('', (req, res, next) => {
+router.get('', (req, res, next) => {
   Post.find()
   .then(documents => {
     //console.log(documents);
@@ -70,7 +78,7 @@ route.get('', (req, res, next) => {
   });
 });
 
-route.get("/:id", (req, res, next) => {
+router.get("/:id", (req, res, next) => {
   Post.findById(req.params.id).then(post => {
     if (post) {
       return res.status(200).json(post);
@@ -80,7 +88,7 @@ route.get("/:id", (req, res, next) => {
   });
 });
 
-route.delete("/:id", (req, res, next) => {
+router.delete("/:id", (req, res, next) => {
   //console.log(req.params.id);
   Post.deleteOne({_id: req.params.id})
   .then(result => {
@@ -89,4 +97,4 @@ route.delete("/:id", (req, res, next) => {
   });
 });
 
-module.exports = route;
+module.exports = router;
