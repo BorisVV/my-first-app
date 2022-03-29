@@ -41,10 +41,13 @@ export class PostsService{
     //return this.posts.find(p => p.id === id); //This will get the id of the post that needs to be edited.
   }
 
-  addPost(title: string, content: string) {
-    const post: Post = {id: null, title: title, content: content};
+  addPost(title: string, content: string, image: File) {
+    const postData = new FormData();
+    postData.append("title", title);
+    postData.append("content", content);
+    postData.append("image", image, title);
     this.http
-      .post<{message: string, postId: string}>("http://localhost:3000/api/posts", post)
+      .post<{message: string, postId: string}>("http://localhost:3000/api/posts", postData)
       .subscribe((respondData) => {
         //const newId = respondData.postId; //This puts the id in a var and then it can be added to the post.id which is null at the moment.
         post.id = respondData.postId; // This works too. The line above, it is set to a var first.
