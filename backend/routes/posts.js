@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
     if (isValid) {
       error = null;
     }
-    cb(null, "backend/images");
+    cb(error, "backend/images");
   },
   filename: (req, file, cb) => {
     const name = file.originalname.toLocaleLowerCase().split(' ').join('-');
@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
 const Post = require('../models/post');
 
 //  Post the list of posts
-route.post('', multer(storage).single("image"), (req, res, next) => {
+route.post('', multer({storage: storage}).single("image"), (req, res, next) => {
   //const post = req.body; //This line was used before the mongodb
   const post = new Post({
     title: req.body.title,
