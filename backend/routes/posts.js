@@ -1,11 +1,36 @@
 const express = require('express');
+const req = require('express/lib/request');
+const multer = require("multer");
 
 const route = express.Router();
+
+const MIME_YPE_MAP = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg'
+};
+
+//Get and store the image file
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const isValid = MIME_YPE_MAP[file.mimetype];
+    let error = new Error("Invalid mime type");
+    if (isValid) {
+      error = null;
+    }
+    cb(null, "backend/images");
+  },
+  filename: (req, file, cb) => {
+    const name = file.originalname.toLocaleLowerCase().split(' ').join('-');
+    const ext = MIME_YPE_MAP[file.mimetype];
+    cb(null, name + '-' + Date.now() + '.' + ext);
+  }
+});
 
 const Post = require('../models/post');
 
 //  Post the list of posts
-route.post('', (req, res, next) => {
+route.post('', multer(storage).single("image"), (req, res, next) => {
   //const post = req.body; //This line was used before the mongodb
   const post = new Post({
     title: req.body.title,
