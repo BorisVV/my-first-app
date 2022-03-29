@@ -42,11 +42,14 @@ router.post('', multer({storage: storage}).single("image"), (req, res, next) => 
     res.status(201).json({
       message: "Post added succesfully!",
       post: {
-        ...postCreated, // This is equal to
+        //...postCreated, // This is equal to and should go above the id: postC...
                         //title: postCreated.title,
                         //content: postCreated.content,
                         //imagePath: postCreated.imagePath
         id: postCreated._id,
+        title: postCreated.title,
+        content: postCreated.content,
+        imagePath: postCreated.imagePath
       }
     });
   });
