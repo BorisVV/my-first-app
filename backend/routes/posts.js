@@ -77,11 +77,17 @@ router.put('/:id', multer({storage: storage}).single("image"), (req, res, next) 
 
 //Get the posts or fetch
 router.get('', (req, res, next) => {
-  Post.find()
-  .then(documents => {
+  const pageSize = +req.query.pageSize;
+  const currentPage = +req.query.page;
+  const postQuery = Post.find();
+  if (pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage-1)).limit(pageSize);
+  }
+  //Post.find() // This was modified because of paginator and if statement setup to
+  postQuery.then(documents => {
     //console.log(documents);
     res.status(200).json({
-      message: "Posts fecthed succesfully!",
+      //message: "Posts fecthed succesfully!" // Use this line for testing/checking
       posts: documents
     });
   });
