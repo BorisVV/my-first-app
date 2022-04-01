@@ -69,7 +69,7 @@ export class PostsService{
     // const post: Post = {id: id, title: title, content: content, imagePath: null }; //Leave as reference
     let postData: Post | FormData;
     if (typeof(image) === 'object') {
-      const postData = new FormData();
+      postData = new FormData();
       postData.append('id', id);
       postData.append('title', title);
       postData.append('content', content);

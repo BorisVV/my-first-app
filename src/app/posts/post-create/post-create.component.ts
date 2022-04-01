@@ -21,7 +21,6 @@ export class PostCreateComponent implements OnInit{
   private mode = "create";
   private postId: string;
 
-
   @Output() postCreated = new EventEmitter();
 
   constructor(public postsService: PostsService, public route: ActivatedRoute){}
