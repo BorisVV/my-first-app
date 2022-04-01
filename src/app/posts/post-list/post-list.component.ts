@@ -17,13 +17,14 @@ export class PostListComponent implements OnInit, OnDestroy {
   isLoading = false; //Loading circle
   length = 10; //paginator
   pageSize = 2; //paginator
+  currentPage = 1; //Query to show what page is displaying
   pageSizeOptions = [1, 2, 5, 10]; //paginator
 
   constructor(public postsService: PostsService) {}
 
   ngOnInit() {
     this.isLoading = true;
-    this.postsService.getPosts();
+    this.postsService.getPosts(this.pageSize, this.currentPage);
     this.postsSub = this.postsService.getPostUpdateListener()
     .subscribe((posts: Post[]) => {
       this.isLoading = false;
@@ -32,6 +33,9 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
 
   onChangedPage(pageData: PageEvent){
+    this.pageSize = pageData.pageSize;
+    this.currentPage = pageData.pageIndex +1;
+    this.postsService.getPosts(this.pageSize, this.currentPage);
     console.log(pageData);
   }
 

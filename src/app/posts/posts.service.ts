@@ -12,9 +12,10 @@ export class PostsService{
 
   constructor(private http: HttpClient, private router: Router) {};
 
-  getPosts() {
+  getPosts(pageSize: number, currentPage: number) {
+    const pages = `?pagesize=${pageSize}&page=${currentPage}`;
     this.http
-    .get<{message: string, posts: any}>("http://localhost:3000/api/posts")
+    .get<{message: string, posts: any}>("http://localhost:3000/api/posts" + pages)
     .pipe(map((postData) => {
       return postData.posts.map(post => {
         console.log(postData.message); //This message is given in the browser's console from ./backend/app.js
