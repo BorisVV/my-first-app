@@ -8,28 +8,28 @@ import { Router } from '@angular/router';
 @Injectable({providedIn: 'root'})
 export class PostsService{
   private posts: Post[] = [];
-  private postsUpdated = new Subject<Post[]>();
+  private postsUpdated = new Subject<{posts: Post[], postCount: number}>();
 
   constructor(private http: HttpClient, private router: Router) {};
 
   getPosts(pageSize: number, currentPage: number) {
     const pages = `?pagesize=${pageSize}&page=${currentPage}`;
     this.http
-    .get<{message: string, posts: any}>("http://localhost:3000/api/posts" + pages)
+    .get<{message: string, posts: any, maxPosts: number}>("http://localhost:3000/api/posts" + pages)
     .pipe(map((postData) => {
-      return postData.posts.map(post => {
-        console.log(postData.message); //This message is given in the browser's console from ./backend/app.js
+      return { posts: postData.posts.map(post => {
+        //console.log(postData.message); //This message is given in the browser's console from ./backend/app.js
         return {
           title: post.title,
           content: post.content,
           id: post._id,
           imagePath: post.imagePath
         };
-      });
+      }), maxPosts: postData.maxPosts};
     }))
-    .subscribe((transformedPosts) => {
-      this.posts = transformedPosts;
-      this.postsUpdated.next([...this.posts]);
+    .subscribe((transformedPostsData) => {
+      this.posts = transformedPostsData.posts;
+      this.postsUpdated.next({posts: [...this.posts], postCount: transformedPostsData.maxPosts});
     });
   }
 
@@ -51,17 +51,6 @@ export class PostsService{
     this.http
       .post<{message: string, post: Post}>("http://localhost:3000/api/posts", postData)
       .subscribe((respondData) => {
-        const post: Post = {
-          id: respondData.post.id,
-          title: title,
-          content: content,
-          imagePath: ""
-        };
-        //const newId = respondData.postId; //This puts the id in a var and then it can be added to the post.id which is null at the moment.
-        //post.id = respondData.postId; // This works too. The line above, it is set to a var first.
-        //console.log(respondData.message); //This displays a message on the browser's console from the ./backend/app.js
-        this.posts.push(post);
-        this.postsUpdated.next([...this.posts]);
         this.router.navigate(['/']);
     });
   }
@@ -86,31 +75,13 @@ export class PostsService{
     this.http
     .put<{message: string}>("http://localhost:3000/api/posts/" + id, postData)
     .subscribe(response => {
-      //Uptates the post locally, is good pratice
-      const updatedPost = [...this.posts];
-      const oldpostId = updatedPost.findIndex(p => p.id === id);
-      const post: Post = {
-        id: id,
-        title: title,
-        content: content,
-        imagePath: ""
-      };
-      updatedPost[oldpostId] = post;
-      this.posts = updatedPost;
-      this.postsUpdated.next([...this.posts]);
       this.router.navigate(['/']);
     });
   }
 
   deletePost(postId: string){
-    this.http
-      .delete<{message: string}>("http://localhost:3000/api/posts/" + postId)
-      .subscribe((respondData) => {
-        console.log(respondData.message); //This displays a message on the browser's console from the ./backend/app.js
-        const updatedPosts = this.posts.filter(post => post.id !== postId);
-        this.posts = updatedPosts;
-        this.postsUpdated.next([...this.posts]);
-       });
+    return this.http
+      .delete<{message: string}>("http://localhost:3000/api/posts/" + postId);
   }
 
 }

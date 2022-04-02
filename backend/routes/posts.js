@@ -1,3 +1,4 @@
+const { count } = require('console');
 const express = require('express');
 const req = require('express/lib/request');
 const multer = require("multer");
@@ -77,18 +78,23 @@ router.put('/:id', multer({storage: storage}).single("image"), (req, res, next) 
 
 //Get the posts or fetch
 router.get('', (req, res, next) => {
-  const pageSize = +req.query.pagesize;
-  const currentPage = +req.query.page;
+  const pageSize = +req.query.pagesize; //query.pagesize needs to be all lowercase - sensitive
+  const currentPage = +req.query.page; //query.page - all lowercase too.
   const postQuery = Post.find();
+  let fetchedPosts;
   if (pageSize && currentPage) {
     postQuery.skip(pageSize * (currentPage-1)).limit(pageSize);
   }
   //Post.find() // This was modified because of paginator and if statement setup to
   postQuery.then(documents => {
-    //console.log(documents);
+    fetchedPosts = documents;
+    return Post.count();
+    }).then(count => {
+       //console.log(documents);
     res.status(200).json({
-      //message: "Posts fecthed succesfully!" // Use this line for testing/checking
-      posts: documents
+      //message: "Posts fecthed succesfully!", // Use this line for testing/checking
+      posts: fetchedPosts,
+      maxPosts: count
     });
   });
 });
