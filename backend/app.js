@@ -6,14 +6,16 @@ const mongoose = require("mongoose");
 
 const app = express(); //returns an express app
 
-const postsRoutes = require('./routes/posts')
+const postsRoutes = require('./routes/posts');
+const userRoutes = require('./routes/user');
 
+// If there is a problem with a message saying 'cyclic dependency detected' remove '?retryWrites=true&w=majority' from below link
 mongoose.connect("mongodb+srv://boirs:xgx3BSJAfRrLF7bI@cluster0.buqn3.mongodb.net/node-angular?retryWrites=true&w=majority")
   .then(() => {
     console.log('Connected to database');
   })
   .catch(() => {
-    console.log('Connection failed!')
+    console.log('Connection failed!');
   });
 
 app.use(bodyParser.json());
@@ -28,6 +30,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/posts', postsRoutes);
+app.use('/api/user', userRoutes);
 
 //Wire with server.js as listener
 module.exports = app;

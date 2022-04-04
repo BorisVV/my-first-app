@@ -9,6 +9,6 @@ export class SignUpComponent{
   isLoading = false;
 
   onSignUp(form: NgForm){
-    console.log(form.value)
+    
   }
 }
