@@ -30,7 +30,7 @@ router.post('/signup', (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
   // If user is shows undefined in resust, add a global var
-  // let fetchedUser;
+  let fetchedUser;
   User.findOne(
     { email: req.body.email }
   )
@@ -41,7 +41,7 @@ router.post('/login', (req, res, next) => {
         { message: 'User email not found' }
       );
     }
-    // fetchedUser = user; // This is to make sure that the when user is called in the .then block. Change user to fetchedUser
+    fetchedUser = user; // This is to make sure that the when user is called in the .then block. Change user to fetchedUser
     return bcrypt.compare(req.body.password, user.password);
   })
   .then(result => {
@@ -53,7 +53,7 @@ router.post('/login', (req, res, next) => {
     }
     // Use Json Web Token (JWT) package to return the token. Install the package npm install --save jsonwebtoken
     const token = jwt.sign(
-      { email: user.email, userID: user._id }, // If there is a problem fetching the user, use a global var in this scope.
+      { email: fetchedUser.email, userID: fetchedUser._id }, // If there is a problem fetching the user, use a global var in this scope.
       'secret_this_should_be_longer',
       { expiresIn: '1h' }
     );
