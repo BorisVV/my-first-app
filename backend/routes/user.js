@@ -29,22 +29,42 @@ router.post('/signup', (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
-  User.findOne({ email: req.body.email })
+  // If user is shows undefined in resust, add a global var
+  // let fetchedUser;
+  User.findOne(
+    { email: req.body.email }
+  )
   .then(user => {
+    console.log(user);
     if (!user) { // 401 Authentication error code.
-      return res.status(401).json({ message: 'User email not found' });
+      return res.status(401).json(
+        { message: 'User email not found' }
+      );
     }
-    return bcrypt.compare(req.body.email, user.password);
+    // fetchedUser = user; // This is to make sure that the when user is called in the .then block. Change user to fetchedUser
+    return bcrypt.compare(req.body.password, user.password);
   })
   .then(result => {
+    console.log(result);
     if (!result) {
-      return res.status(401).json({ message: 'Password not found' });
+      return res.status(401).json(
+        { message: 'Password not found' }
+      );
     }
     // Use Json Web Token (JWT) package to return the token. Install the package npm install --save jsonwebtoken
-    const token = jwt.sign({ email: user.email, userID: user._id }, 'secret_this_should_be_longer', { expiresIn: '1h' });
+    const token = jwt.sign(
+      { email: user.email, userID: user._id }, // If there is a problem fetching the user, use a global var in this scope.
+      'secret_this_should_be_longer',
+      { expiresIn: '1h' }
+    );
+    res.status(200).json(
+      { token: token }
+    );
   })
   .catch(err => {
-    return res.status(401).json({ message: 'Login denied, check email and password', err});
+    return res.status(401).json(
+      { message: 'Login denied, check email and password', err}
+    );
   })
 });
 
