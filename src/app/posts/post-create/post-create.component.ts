@@ -65,7 +65,6 @@ export class PostCreateComponent implements OnInit{
     this.form.patchValue({image: file});
     this.form.get('image').updateValueAndValidity();
     const reader = new FileReader();
-    //console.log(this.form); //This is used to see it on the console and get the information of the image.
     reader.onload = () => {
       this.imagePreview = reader.result as string; //Without the 'as string' it gives an error.
     }

@@ -2,7 +2,6 @@ const express = require('express');
 const User = require('../models/user');
 const bcrypt = require('bcrypt'); // Install third party package npm install --save bcrypt
 const jwt = require('jsonwebtoken'); // Install third package npm install --save jsonwebtoken
-const user = require('../models/user');
 
 const router = express.Router();
 // npm install --save bcrypt

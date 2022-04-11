@@ -18,7 +18,6 @@ export class PostsService{
     .get<{message: string, posts: any, maxPosts: number}>("http://localhost:3000/api/posts" + pages)
     .pipe(map((postData) => {
       return { posts: postData.posts.map(post => {
-        //console.log(postData.message); //This message is given in the browser's console from ./backend/app.js
         return {
           title: post.title,
           content: post.content,
