@@ -11,7 +11,6 @@ const routes: Routes = [ // Load pages
   {path: 'edit/:postId', component: PostCreateComponent},
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignUpComponent}
-
 ];
 
 @NgModule({

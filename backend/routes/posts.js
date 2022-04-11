@@ -1,8 +1,6 @@
-const { count } = require('console');
 const express = require('express');
-const req = require('express/lib/request');
 const multer = require("multer");
-
+const Post = require('../models/post');
 const checkAuth = require('../middleware/check-auth')
 
 const router = express.Router();
@@ -30,12 +28,8 @@ const storage = multer.diskStorage({
   }
 });
 
-const Post = require('../models/post');
-
 //  Post the list of posts
-router.post('',
-  checkAuth,
-  multer({storage: storage}).single("image"), (req, res, next) => {
+router.post('', checkAuth, multer({storage: storage}).single("image"), (req, res, next) => {
   const url = req.protocol + '://' + req.get("host");
   //const post = req.body; //This line was used before the mongodb
   const post = new Post({
@@ -47,10 +41,6 @@ router.post('',
     res.status(201).json({
       message: "Post added succesfully!",
       post: {
-        //...postCreated, // This is equal to and should go above the id: postC...
-                        //title: postCreated.title,
-                        //content: postCreated.content,
-                        //imagePath: postCreated.imagePath
         id: postCreated._id,
         title: postCreated.title,
         content: postCreated.content,
@@ -60,9 +50,7 @@ router.post('',
   });
 });
 
-router.put('/:id',
-  checkAuth,
-  multer({storage: storage}).single("image"), (req, res, next) => {
+router.put('/:id', checkAuth, multer({storage: storage}).single("image"), (req, res, next) => {
   let imagePath = req.body.imagePath;
   if (req.file) {
     const url = req.protocol + '://' + req.get("host");
@@ -74,9 +62,7 @@ router.put('/:id',
     content: req.body.content,
     imagePath: req.body.imagePath
   };
-  Post.updateOne({_id: req.params.id}, post)
-  .then((result) => {
-    //console.log(result); //This displays information in the terminal
+  Post.updateOne({_id: req.params.id}, post).then((result) => {
     res.status(200).json({message: "Post updated succesfully!"});
   });
 });
@@ -95,8 +81,7 @@ router.get('', (req, res, next) => {
     fetchedPosts = documents;
     return Post.count();
     }).then(count => {
-       //console.log(documents);
-    res.status(200).json({
+      res.status(200).json({
       //message: "Posts fecthed succesfully!", // Use this line for testing/checking
       posts: fetchedPosts,
       maxPosts: count
@@ -116,10 +101,10 @@ router.get("/:id", (req, res, next) => {
 
 router.delete("/:id", checkAuth, (req, res, next) => {
   //console.log(req.params.id);
-  Post.deleteOne({_id: req.params.id})
-  .then(result => {
-    res.status(200).json({message: "Post Deleted"});
-    //console.log(result);
+  Post.deleteOne({_id: req.params.id}).then(result => {
+    res.status(200).json({
+      message: "Post Deleted"
+    });
   });
 });
 

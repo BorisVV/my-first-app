@@ -13,7 +13,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatPaginatorModule} from '@angular/material/paginator';
 
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import { AppComponent} from './app.component';
 import { PostCreateComponent } from './posts/post-create/post-create.component';
@@ -23,6 +23,7 @@ import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
 import { SignUpComponent } from './auth/signup/signup.component';
+import { AuthInterceptor } from './auth/auth-interceptor';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { SignUpComponent } from './auth/signup/signup.component';
     HttpClientModule
   ],
 
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass:AuthInterceptor, multi: true }
+  ],
   //Another option
   // provider: [PostService]
 
@@ -58,4 +60,4 @@ import { SignUpComponent } from './auth/signup/signup.component';
   //providers: [{provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
