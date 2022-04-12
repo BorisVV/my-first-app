@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
@@ -14,13 +15,18 @@ import { PostsService } from '../posts.service';
 export class PostListComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
   private postsSub: Subscription;
-  isLoading = false; //Loading circle
-  length = 0; //paginator
-  pageSize = 1; //paginator
-  currentPage = 1; //Query to show what page is displaying
-  pageSizeOptions = [1, 2, 5, 10]; //paginator
+  private authStatusSub: Subscription; // Store information about user.
 
-  constructor(public postsService: PostsService) {}
+  userIsAuthenticated = false;
+  isLoading = false; // Loading circle
+
+  // This is for the paginator selector
+  length = 0; // Number of items
+  pageSize = 1; // Number of items displayed per page, 1 means default to 1.
+  currentPage = 1; //Query to show what page is displaying, e.g. 1 of 2.
+  pageSizeOptions = [1, 2, 5, 10]; // Drop down option, how many items to display per page.
+
+  constructor(public postsService: PostsService, private authService: AuthService) {}
 
   ngOnInit() {
     this.isLoading = true;
@@ -30,6 +36,11 @@ export class PostListComponent implements OnInit, OnDestroy {
       this.isLoading = false;
       this.length = postData.postCount;
       this.posts = postData.posts;
+    });
+    this.userIsAuthenticated = this.authService.getIsAuthenticated(); // User is validated and able to edit and delete.
+    this. authStatusSub = this.authService.getAuthStatusListener()
+    .subscribe(isAuthenticated => {
+      this.userIsAuthenticated = isAuthenticated;
     });
   }
 
@@ -48,6 +59,7 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.postsSub.unsubscribe();
+    this.authStatusSub.unsubscribe();
   }
 
 }
