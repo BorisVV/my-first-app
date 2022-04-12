@@ -22,7 +22,7 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   // This is for the paginator selector
   length = 0; // Number of items
-  pageSize = 1; // Number of items displayed per page, 1 means default to 1.
+  pageSize = 5; // Number of items displayed per page, defaults to the number set here.
   currentPage = 1; //Query to show what page is displaying, e.g. 1 of 2.
   pageSizeOptions = [1, 2, 5, 10]; // Drop down option, how many items to display per page.
 

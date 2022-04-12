@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { AuthData } from "./auth-data.model";
 
@@ -9,7 +10,8 @@ export class AuthService {
   private token: string;
   private authStatusListener = new Subject<boolean>();
 
-  constructor(private http: HttpClient) {}
+  // Router is to redirect to main page after login or logout
+  constructor(private http: HttpClient, private router: Router) {}
 
   getToken() {
     return this.token;
@@ -38,6 +40,7 @@ export class AuthService {
       if (token) {
         this.isAuthenticated = true; // This will allow to show the 'edit' and 'delete' buttons for the user in the posts list.
         this.authStatusListener.next(true); // Validate user and give access to its page.
+        this.router.navigate(['/']); // Send user to the main page
       }
     });
   }
@@ -46,5 +49,6 @@ export class AuthService {
     this.token = null;
     this.isAuthenticated = false;
     this.authStatusListener.next(false);
+    this.router.navigate(['/']);
   }
 }
