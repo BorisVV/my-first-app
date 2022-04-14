@@ -9,7 +9,7 @@ import { PostListComponent } from "./posts/post-list/post-list.component";
 const routes: Routes = [ // Load pages
   {path: '', component: PostListComponent}, //Main page with posts
   {path: 'create', component: PostCreateComponent, canActivate: [AuthGuard]},
-  {path: 'edit/:postId', component: PostCreateComponent},
+  {path: 'edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignUpComponent}
 ];
