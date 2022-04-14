@@ -47,9 +47,22 @@ export class AuthService {
         }, expiresInDuration * 1000);
         this.isAuthenticated = true; // This will allow to show the 'edit' and 'delete' buttons for the user in the posts list.
         this.authStatusListener.next(true); // Validate user and give access to its page.
+        const now = new Date();
+        console.log(now);
+        const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
+        console.log(expirationDate);
+        this.saveAuthData(token, expirationDate); // Keep the data so the user can stay logged in.
         this.router.navigate(['/']); // Send user to the main page
       }
     });
+  }
+
+  autoAuthUser() {
+    const authInformation = this.getAuthData();
+    const now = new Date();
+    const isInFuture = authInformation.expirationDate > now;
+    if (isInFuture) {
+    }
   }
 
   logout() {
@@ -59,4 +72,27 @@ export class AuthService {
     this.router.navigate(['/']);
     clearTimeout(this.tokenTimer);
   }
+
+  private saveAuthData(token: string, expirationDate: Date) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('expiration', expirationDate.toISOString()) // Save data to local storage. It allows the user to be signed in while moving from one form to another or pages.
+  }
+
+  private clearAuthData() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('expiration');
+  }
+
+  private getAuthData() {
+    const token = localStorage.getItem('token');
+    const expirationDate = localStorage.getItem('expiration');
+    if (!token || !expirationDate) {
+      return;
+    }
+    return {
+      token: token,
+      expirationDate: new Date(expirationDate)
+    }
+  }
+
 }
