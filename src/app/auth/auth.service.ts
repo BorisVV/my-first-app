@@ -41,10 +41,7 @@ export class AuthService {
       this.token = token;
       if (token) {
         const expiresInDuration = response.expiresIn;
-        // If setTimeout throws an error use window.setTimeout(...)
-        this.tokenTimer = setTimeout(() => {
-          this.logout();
-        }, expiresInDuration * 1000);
+        this.setAuthTimer(expiresInDuration);
         this.isAuthenticated = true; // This will allow to show the 'edit' and 'delete' buttons for the user in the posts list.
         this.authStatusListener.next(true); // Validate user and give access to its page.
         const now = new Date();
@@ -59,9 +56,16 @@ export class AuthService {
 
   autoAuthUser() {
     const authInformation = this.getAuthData();
+    if (!authInformation) {
+      return;
+    }
     const now = new Date();
-    const isInFuture = authInformation.expirationDate > now;
-    if (isInFuture) {
+    const expiresIn = authInformation.expirationDate.getTime() - now.getTime();
+    if (expiresIn > 0) {
+      this.token = authInformation.token;
+      this.isAuthenticated = true;
+      this.setAuthTimer(expiresIn / 1000)
+      this.authStatusListener.next(true);
     }
   }
 
@@ -69,8 +73,17 @@ export class AuthService {
     this.token = null;
     this.isAuthenticated = false;
     this.authStatusListener.next(false);
+    this.clearAuthData();
     this.router.navigate(['/']);
     clearTimeout(this.tokenTimer);
+  }
+
+  private setAuthTimer(duration) {
+    console.log("Setting timer: " + duration)
+    // If setTimeout throws an error use window.setTimeout(...)
+    this.tokenTimer = setTimeout(() => {
+      this.logout();
+    }, duration * 1000);
   }
 
   private saveAuthData(token: string, expirationDate: Date) {
