@@ -45,9 +45,7 @@ export class AuthService {
         this.isAuthenticated = true; // This will allow to show the 'edit' and 'delete' buttons for the user in the posts list.
         this.authStatusListener.next(true); // Validate user and give access to its page.
         const now = new Date();
-        console.log(now);
         const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
-        console.log(expirationDate);
         this.saveAuthData(token, expirationDate); // Keep the data so the user can stay logged in.
         this.router.navigate(['/']); // Send user to the main page
       }
@@ -79,7 +77,6 @@ export class AuthService {
   }
 
   private setAuthTimer(duration) {
-    console.log("Setting timer: " + duration)
     // If setTimeout throws an error use window.setTimeout(...)
     this.tokenTimer = setTimeout(() => {
       this.logout();

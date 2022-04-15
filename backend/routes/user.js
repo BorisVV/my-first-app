@@ -40,7 +40,7 @@ router.post('/login', (req, res, next) => {
     // Use Json Web Token (JWT) package to return the token. Install the package npm install --save jsonwebtoken
     // If there is a problem fetching the user, use a global var in this scope.
     const token = jwt.sign(
-      { email: fetchedUser.email, userID: fetchedUser._id },
+      { email: fetchedUser.email, userId: fetchedUser._id },
       'secret_this_should_be_longer',
       { expiresIn: '1h'}
     );
