@@ -4,6 +4,7 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
 
 import { PostsService } from "../posts.service";
 import { Post } from "../post.model";
+import { mimeType } from "./mime-type.validator";
 
 @Component({
   selector: 'app-post-create',
@@ -20,7 +21,6 @@ export class PostCreateComponent implements OnInit{
   private mode = "create";
   private postId: string;
 
-
   @Output() postCreated = new EventEmitter();
 
   constructor(public postsService: PostsService, public route: ActivatedRoute){}
@@ -32,7 +32,7 @@ export class PostCreateComponent implements OnInit{
       'content': new FormControl(null, {
         validators:[Validators.required]}),
       'image': new FormControl(null, {
-        validators: [Validators.required]})
+        validators: [Validators.required], asyncValidators: [mimeType]})
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("postId")) {
@@ -44,11 +44,13 @@ export class PostCreateComponent implements OnInit{
           this.post = {
             id: postData._id,
             title: postData.title,
-            content: postData.content
+            content: postData.content,
+            imagePath: postData.imagePath
           };
           this.form.setValue({
             'title': this.post.title,
-            'content': this.post.content
+            'content': this.post.content,
+            'image': this.post.imagePath
           });
         });
       } else {
@@ -63,7 +65,6 @@ export class PostCreateComponent implements OnInit{
     this.form.patchValue({image: file});
     this.form.get('image').updateValueAndValidity();
     const reader = new FileReader();
-    //console.log(this.form); //This is used to see it on the console and get the information of the image.
     reader.onload = () => {
       this.imagePreview = reader.result as string; //Without the 'as string' it gives an error.
     }
@@ -78,12 +79,16 @@ export class PostCreateComponent implements OnInit{
     if (this.mode === "create") {
       this.postsService.addPost(
         this.form.value.title,
-        this.form.value.content);
+        this.form.value.content,
+        this.form.value.image
+      );
     }else {
       this.postsService.updatedPost(
         this.postId,
         this.form.value.title,
-        this.form.value.content);
+        this.form.value.content,
+        this.form.value.image
+      );
     }
     this.form.reset(); //reset the inputs and text on the form
   }
