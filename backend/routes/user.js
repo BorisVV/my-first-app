@@ -25,17 +25,20 @@ router.post('/signup', (req, res, next) => {
 router.post('/login', (req, res, next) => {
   // If user is shows undefined in resust, add a global var
   let fetchedUser;
-  User.findOne({ email: req.body.email }).then(user => {
+  User.findOne({ email: req.body.email })
+  .then(user => {
     if (!user) { // 401 Authentication error code.
       return res.status(401).json({
-        message: 'User email not found'
+        message: 'User email not found',
       });
     }
     fetchedUser = user; // This is to make sure that the when user is called in the .then block. Change user to fetchedUser
     return bcrypt.compare(req.body.password, user.password);
   }).then(result => {
     if (!result) {
-      return res.status(401).json({ message: 'Password not found' });
+      return res.status(401).json({
+        message: 'Password not found'
+      });
     }
     // Use Json Web Token (JWT) package to return the token. Install the package npm install --save jsonwebtoken
     // If there is a problem fetching the user, use a global var in this scope.

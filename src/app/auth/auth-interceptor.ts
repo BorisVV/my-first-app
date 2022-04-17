@@ -6,6 +6,7 @@ import { AuthService } from "./auth.service";
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService){}
 
+  // This is to get the user authorization to sign in.
   intercept(req: HttpRequest<any>, next: HttpHandler){
     const authToken = this.authService.getToken();
     const authRequest = req.clone({
