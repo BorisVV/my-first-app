@@ -16,6 +16,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
   private postsSub: Subscription;
   private authStatusSub: Subscription; // Store information about user.
+  userId: string;
 
   userIsAuthenticated = false;
   isLoading = false; // Loading circle
@@ -31,6 +32,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isLoading = true;
     this.postsService.getPosts(this.pageSize, this.currentPage);
+    this.userId = this.authService.getUserId();
     this.postsSub = this.postsService.getPostUpdateListener()
     .subscribe((postData: {posts: Post[], postCount: number}) => {
       this.isLoading = false;
@@ -41,6 +43,7 @@ export class PostListComponent implements OnInit, OnDestroy {
     this. authStatusSub = this.authService.getAuthStatusListener()
     .subscribe(isAuthenticated => {
       this.userIsAuthenticated = isAuthenticated;
+      this.userId = this.authService.getUserId(); // If the user changes forms.
     });
   }
 

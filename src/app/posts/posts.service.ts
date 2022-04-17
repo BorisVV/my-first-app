@@ -38,7 +38,13 @@ export class PostsService{
   }
 
   getPost(id) {
-    return this.http.get<{_id: string, title: string, content: string, imagePath: string}>("http://localhost:3000/api/posts/" + id);
+    return this.http.get<{
+      _id: string;
+      title: string;
+      content: string;
+      imagePath: string;
+      creator: string;
+    }>("http://localhost:3000/api/posts/" + id);
     // This was the original set up, that was doing work before changing adding the app.js.app.get...
     //return this.posts.find(p => p.id === id); //This will get the id of the post that needs to be edited.
   }
@@ -69,7 +75,8 @@ export class PostsService{
           id: id,
           title: title,
           content: content,
-          imagePath: image
+          imagePath: image,
+          creator: null
       };
     }
     this.http
