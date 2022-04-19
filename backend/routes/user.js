@@ -17,7 +17,8 @@ router.post('/signup', (req, res, next) => {
         result: result});
       }).catch(err => {
         res.status(500).json({
-          error: err});
+          message: "User's email already exist"
+        });
       });
   });
 });
@@ -37,7 +38,7 @@ router.post('/login', (req, res, next) => {
   }).then(result => {
     if (!result) {
       return res.status(401).json({
-        message: 'Password not found'
+        message: 'Invalid password'
       });
     }
     // Use Json Web Token (JWT) package to return the token. Install the package npm install --save jsonwebtoken
@@ -54,7 +55,7 @@ router.post('/login', (req, res, next) => {
     });
   }).catch(err => {
     return res.status(401).json({
-      message: 'Login denied, check email and password'
+      message: 'Invalid authentication credentials!'
     });
   });
 });

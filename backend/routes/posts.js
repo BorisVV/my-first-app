@@ -29,7 +29,9 @@ const storage = multer.diskStorage({
 });
 
 //  Post the list of posts
-router.post('', checkAuth, multer({storage: storage}).single("image"), (req, res, next) => {
+router.post('',
+checkAuth,
+multer({storage: storage}).single("image"), (req, res, next) => {
   const url = req.protocol + '://' + req.get("host");
   //const post = req.body; //This line was used before the mongodb
   const post = new Post({
@@ -47,6 +49,10 @@ router.post('', checkAuth, multer({storage: storage}).single("image"), (req, res
         content: postCreated.content,
         imagePath: postCreated.imagePath
       }
+    });
+  }).catch(error => {
+    res.status(500).json({
+      message: "Creating a post failed"
     });
   });
 });
@@ -66,12 +72,16 @@ router.put('/:id', checkAuth, multer({storage: storage}).single("image"), (req, 
     creator: req.body.userId
   };
   Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
-  .then((result) => {
+  .then(result => {
     if (result.modifiedCount > 0) {
       res.status(200).json({ message: "Post updated succesfully!" });
     } else {
       res.status(401).json({ message: "Not Authorized!" });
     }
+  }).catch(error => {
+    res.status(500).json({
+      message: "Couldn't update post!"
+    });
   });
 });
 
@@ -93,6 +103,10 @@ router.get('', (req, res, next) => {
       //message: "Posts fecthed succesfully!", // Use this line for testing/checking
       posts: fetchedPosts,
       maxPosts: count
+    }).catch(error => {
+      res.status(500).json({
+        message: "Fetching post failed!"
+      });
     });
   });
 });
@@ -104,6 +118,10 @@ router.get("/:id", (req, res, next) => {
     } else {
       return res.status(404).json({message: "Post id not founded"});
     }
+  }).catch(error => {
+    res.status(500).json({
+      message: "Fetching post failed!"
+    });
   });
 });
 
@@ -116,6 +134,10 @@ router.delete("/:id", checkAuth, (req, res, next) => {
     } else {
       res.status(401).json({ message: "Not Authorized!" });
     }
+  }).catch(error => {
+    res.status(500).json({
+      message: "Fetching post failed!"
+    });
   });
 });
 
