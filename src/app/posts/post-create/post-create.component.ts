@@ -22,7 +22,7 @@ export class PostCreateComponent implements OnInit, OnDestroy{
   imagePreview: string;
   private mode = "create";
   private postId: string;
-  private authStatusSub: Subscription
+  private authStatusSub: Subscription;
 
   @Output() postCreated = new EventEmitter();
 
@@ -74,7 +74,7 @@ export class PostCreateComponent implements OnInit, OnDestroy{
   }
 
   onImagePicked(event: Event) {
-    const file = (event.target as HTMLInputElement).files [0]; //Witout the parenthesis, it will create an error for .files
+    const file = (event.target as HTMLInputElement).files [0]; //Witout the parenthesis or as, it will create an error for .files
     this.form.patchValue({image: file});
     this.form.get('image').updateValueAndValidity();
     const reader = new FileReader();

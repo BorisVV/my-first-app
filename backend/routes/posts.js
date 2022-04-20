@@ -86,7 +86,7 @@ router.put('/:id', checkAuth, multer({storage: storage}).single("image"), (req, 
 });
 
 //Get the posts or fetch
-router.get('', (req, res, next) => {
+router.get('', (req, res, next) =>{
   const pageSize = +req.query.pagesize; //query.pagesize needs to be all lowercase - sensitive
   const currentPage = +req.query.page; //query.page - all lowercase too.
   const postQuery = Post.find();
@@ -98,15 +98,15 @@ router.get('', (req, res, next) => {
   postQuery.then(documents => {
     fetchedPosts = documents;
     return Post.count();
-    }).then(count => {
-      res.status(200).json({
+  }).then(count => {
+    res.status(200).json({
       //message: "Posts fecthed succesfully!", // Use this line for testing/checking
       posts: fetchedPosts,
       maxPosts: count
-    }).catch(error => {
-      res.status(500).json({
-        message: "Fetching post failed!"
-      });
+    });
+  }).catch(error => {
+    res.status(500).json({
+      message: "Fetching post failed!"
     });
   });
 });
