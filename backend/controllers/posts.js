@@ -16,7 +16,8 @@ exports.createPost = (req, res, next) => {
         id: postCreated._id,
         title: postCreated.title,
         content: postCreated.content,
-        imagePath: postCreated.imagePath
+        imagePath: postCreated.imagePath,
+        creator: postCreated.userId
       }
     });
   }).catch(error => {
@@ -36,7 +37,7 @@ exports.updatePost = (req, res, next) => {
     _id: req.body.id,
     title: req.body.title,
     content: req.body.content,
-    imagePath: req.body.imagePath,
+    imagePath: imagePath,
     creator: req.body.userId
   };
   Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
