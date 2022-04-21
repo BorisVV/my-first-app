@@ -42,7 +42,7 @@ exports.updatePost = (req, res, next) => {
   };
   Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
   .then(result => {
-    if (result.modifiedCount > 0) {
+    if (result.matchedCount > 0) { // printing the result will give the options like modifiedCount and matchedCount
       res.status(200).json({ message: "Post updated succesfully!" });
     } else {
       res.status(401).json({ message: "Not Authorized!" });
