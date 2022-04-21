@@ -4,6 +4,9 @@ import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Post } from './post.model';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
+
+const BACKEND_URL = environment.apiUrl;
 
 @Injectable({providedIn: 'root'})
 export class PostsService{
@@ -15,7 +18,7 @@ export class PostsService{
   getPosts(pageSize: number, currentPage: number) {
     const pages = `?pagesize=${pageSize}&page=${currentPage}`;
     this.http
-    .get<{message: string, posts: any, maxPosts: number}>("http://localhost:3000/api/posts" + pages)
+    .get<{message: string, posts: any, maxPosts: number}>(BACKEND_URL + "/posts" + pages)
     .pipe(map((postData) => {
       return { posts: postData.posts.map(post => {
         return {
@@ -44,7 +47,7 @@ export class PostsService{
       content: string;
       imagePath: string;
       creator: string;
-    }>("http://localhost:3000/api/posts/" + id);
+    }>(BACKEND_URL + "/posts/" + id);
     // This was the original set up, that was doing work before changing adding the app.js.app.get...
     //return this.posts.find(p => p.id === id); //This will get the id of the post that needs to be edited.
   }
@@ -55,7 +58,7 @@ export class PostsService{
     postData.append("content", content);
     postData.append("image", image, title);
     this.http
-      .post<{message: string, post: Post}>("http://localhost:3000/api/posts", postData)
+      .post<{message: string, post: Post}>(BACKEND_URL + "/posts", postData)
       .subscribe((respondData) => {
         this.router.navigate(['/']);
     });
@@ -80,7 +83,7 @@ export class PostsService{
       };
     }
     this.http
-    .put<{message: string}>("http://localhost:3000/api/posts/" + id, postData)
+    .put<{message: string}>(BACKEND_URL + "/posts/" + id, postData)
     .subscribe(response => {
       this.router.navigate(['/']);
     });
@@ -88,7 +91,7 @@ export class PostsService{
 
   deletePost(postId: string){
     return this.http
-      .delete<{message: string}>("http://localhost:3000/api/posts/" + postId);
+      .delete<{message: string}>(BACKEND_URL + "/posts/" + postId);
   }
 
 }
