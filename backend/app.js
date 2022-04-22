@@ -10,7 +10,7 @@ const postsRoutes = require('./routes/posts');
 const userRoutes = require('./routes/user');
 
 // If there is a problem with a message saying 'cyclic dependency detected' remove '?retryWrites=true&w=majority' from below link
-mongoose.connect("mongodb+srv://boirs:xgx3BSJAfRrLF7bI@cluster0.buqn3.mongodb.net/node-angular?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://boirs:" + process.env.MONGO_ATLAS_PW + "@cluster0.buqn3.mongodb.net/node-angular?retryWrites=true&w=majority")
   .then(() => {
     console.log('Connected to database');
   })
