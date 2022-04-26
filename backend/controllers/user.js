@@ -1,6 +1,6 @@
 
 const User = require('../models/user');
-const bcrypt = require('bcrypt'); // Install third party package npm install --save bcrypt
+const bcrypt = require('bcryptjs'); // Install third party package npm install --save bcrypt
 const jwt = require('jsonwebtoken'); // Install third package npm install --save jsonwebtoken
 
 exports.createUser = (req, res, next) => {
