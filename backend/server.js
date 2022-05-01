@@ -1,5 +1,3 @@
-
-
 const app = require('./app'); //Wire with backend/app.js
 const debug = require("debug")("node-angular");
 const http = require('http');
